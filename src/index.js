@@ -20,15 +20,19 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://chat-app-vjqf.onrender.com",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
-res.cookie("token", token, {
-  httpOnly: true,
-  secure: true, 
-  sameSite: "None", 
+
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self' 'unsafe-inline' blob:; connect-src 'self' https://chat-app-vjqf.onrender.com wss:; img-src 'self' data:; style-src 'self' 'unsafe-inline';"
+  );
+  next();
 });
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
