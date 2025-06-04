@@ -24,6 +24,11 @@ app.use(
     credentials: true,
   })
 );
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: true, 
+  sameSite: "None", 
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
